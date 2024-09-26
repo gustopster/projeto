@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using NomeDoProjetoBackEnd.Models;
-using NomeDoProjetoBackEnd.Services;
+using Projeto.Models;
+using Projeto.Services;
 
-namespace NomeDoProjetoBackEnd.Controllers
+namespace Projeto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

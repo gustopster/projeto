@@ -1,49 +1,47 @@
-using NomeDoProjetoBackEnd.Interfaces;
-using NomeDoProjetoBackEnd.Models;
+using Projeto.Data;
+using Projeto.Interfaces;
+using Projeto.Models;
 
-namespace NomeDoProjetoBackEnd.Repositories
+namespace Projeto.Repositories
 {
     public class AnimalRepository : IAnimalRepository
     {
-        private static List<Animal> Animals = new List<Animal>
+        private readonly AppDbContext _context;
+
+        public AnimalRepository(AppDbContext context)
         {
-            new Animal { Id = 1, Name = "Leão", Type = "Mamífero" },
-            new Animal { Id = 2, Name = "Papagaio", Type = "Ave" },
-            new Animal { Id = 3, Name = "Cobra", Type = "Réptil" }
-        };
+            _context = context;
+        }
 
         public IEnumerable<Animal> GetAllAnimals()
         {
-            return Animals;
+            return _context.Animals.ToList();
         }
 
         public Animal GetAnimalById(int id)
         {
-            return Animals.FirstOrDefault(a => a.Id == id);
+            return _context.Animals.FirstOrDefault(a => a.Id == id);
         }
 
         public void AddAnimal(Animal animal)
         {
-            animal.Id = Animals.Count + 1;
-            Animals.Add(animal);
+            _context.Animals.Add(animal);
+            _context.SaveChanges();
         }
 
         public void UpdateAnimal(Animal animal)
         {
-            var existingAnimal = Animals.FirstOrDefault(a => a.Id == animal.Id);
-            if (existingAnimal != null)
-            {
-                existingAnimal.Name = animal.Name;
-                existingAnimal.Type = animal.Type;
-            }
+            _context.Animals.Update(animal);
+            _context.SaveChanges();
         }
 
         public void DeleteAnimal(int id)
         {
-            var animal = Animals.FirstOrDefault(a => a.Id == id);
+            var animal = _context.Animals.FirstOrDefault(a => a.Id == id);
             if (animal != null)
             {
-                Animals.Remove(animal);
+                _context.Animals.Remove(animal);
+                _context.SaveChanges();
             }
         }
     }

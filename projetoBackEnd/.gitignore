@@ -33,11 +33,6 @@ publish/
 /dist/
 /out/
 
-# Arquivos do ASP.NET Core
-appsettings*.json
-appsettings.Development.json
-appsettings.Local.json
-
 # Arquivos temporários e de cache
 .vs/
 /tmp/

@@ -1,4 +1,4 @@
-namespace NomeDoProjetoBackEnd.Models
+namespace Projeto.Models
 {
     public class Animal
     {

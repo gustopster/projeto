@@ -1,7 +1,7 @@
-using NomeDoProjetoBackEnd.Interfaces;
-using NomeDoProjetoBackEnd.Models;
+using Projeto.Interfaces;
+using Projeto.Models;
 
-namespace NomeDoProjetoBackEnd.Services
+namespace Projeto.Services
 {
     public class AnimalService
     {

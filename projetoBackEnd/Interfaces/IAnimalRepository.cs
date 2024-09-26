@@ -1,6 +1,6 @@
-using NomeDoProjetoBackEnd.Models;
+using Projeto.Models;
 
-namespace NomeDoProjetoBackEnd.Interfaces
+namespace Projeto.Interfaces
 {
     public interface IAnimalRepository
     {
