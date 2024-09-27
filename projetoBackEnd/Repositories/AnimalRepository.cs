@@ -31,8 +31,14 @@ namespace Projeto.Repositories
 
         public void UpdateAnimal(Animal animal)
         {
-            _context.Animals.Update(animal);
-            _context.SaveChanges();
+            // Se o animal já estiver sendo rastreado, não faça Update
+            var existingAnimal = _context.Animals.Find(animal.Id);
+            if (existingAnimal != null)
+            {
+                existingAnimal.Name = animal.Name;
+                existingAnimal.Type = animal.Type;
+                _context.SaveChanges();
+            }
         }
 
         public void DeleteAnimal(int id)

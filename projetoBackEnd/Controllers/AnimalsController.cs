@@ -43,13 +43,16 @@ namespace Projeto.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateAnimal(int id, [FromBody] Animal updatedAnimal)
         {
-            var animal = _animalService.GetAnimalById(id);
-            if (animal == null)
+            var existingAnimal = _animalService.GetAnimalById(id);
+            if (existingAnimal == null)
             {
                 return NotFound();
             }
 
-            _animalService.UpdateAnimal(updatedAnimal);
+            existingAnimal.Name = updatedAnimal.Name;
+            existingAnimal.Type = updatedAnimal.Type;
+
+            _animalService.UpdateAnimal(existingAnimal);
             return NoContent();
         }
 
