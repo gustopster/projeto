@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Animal } from '../Types/AnimalsType';
 import { getAnimals } from '../Services/Animals';
-import { MaterialReactTable, MRT_ColumnDef, MRT_ShowHideColumnsButton, MRT_ToggleFullScreenButton } from 'material-react-table';
+import { MaterialReactTable, MRT_ColumnDef, MRT_Row, MRT_ShowHideColumnsButton, MRT_ToggleFullScreenButton } from 'material-react-table';
 import { ThemeProvider } from '@emotion/react';
-import { createTheme } from '@mui/material';
+import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const AnimalsComponent: React.FC = () => {
     const [animals, setAnimals] = useState<Animal[]>([]);
@@ -37,6 +39,34 @@ const AnimalsComponent: React.FC = () => {
             header: 'Tipo',
             accessorKey: 'type'
         },
+        {
+            header: 'Data de Coleta',
+            accessorKey: 'dataColeta',
+            Cell: ({ cell }) => {
+                const resultado = cell.getValue() as Date;
+
+                // Verifica se o resultado é uma data válida antes de formatar
+                const dataFormatada = resultado ? new Date(resultado).toLocaleDateString() : 'Data inválida';
+
+                return (
+                    <span>
+                        {dataFormatada}
+                    </span>
+                );
+            }
+        },
+        {
+            header: 'Número ID IPRAM',
+            accessorKey: 'numeroIdIpram'
+        },
+        {
+            header: 'FAI',
+            accessorKey: 'fai'
+        },
+        {
+            header: 'Observações',
+            accessorKey: 'observacoes'
+        }
     ], []);
 
     const theme = createTheme({
@@ -50,6 +80,16 @@ const AnimalsComponent: React.FC = () => {
             }
         }
     });
+
+    const deleteUser = (id: number) => {
+        console.log('deletar', id)
+    };
+
+    const openDeleteConfirmModal = (row: MRT_Row<Animal>) => {
+        if (window.confirm(`Você deseja realmente excluir "${row.original.name}"?`)) {
+            deleteUser(row.original.id);
+        }
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -80,10 +120,27 @@ const AnimalsComponent: React.FC = () => {
                         maxHeight: '65vh'
                     }
                 }}
-                enableStickyHeader
+                enableStickyHeader={true}
                 enablePagination={false}
                 initialState={{
                     showColumnFilters: true
+                }}
+                enableEditing={true}
+                renderRowActions={({ table, row }) => {
+                    return (
+                        <Box sx={{ display: 'flex', gap: '1rem' }}>
+                            <Tooltip title="Edit">
+                                <IconButton onClick={() => table.setEditingRow(row)}>
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    );
                 }}
             />
         </ThemeProvider>
