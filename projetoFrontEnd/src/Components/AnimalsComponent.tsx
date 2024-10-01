@@ -56,7 +56,7 @@ const AnimalsComponent: React.FC = () => {
             }
         },
         {
-            header: 'Número ID IPRAM',
+            header: 'N IPRAM',
             accessorKey: 'numeroIdIpram'
         },
         {
