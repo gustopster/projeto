@@ -7,6 +7,7 @@ import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from './ConfirmComponent/indexContext';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const AnimalsComponent: React.FC = () => {
 
@@ -123,13 +124,34 @@ const AnimalsComponent: React.FC = () => {
                 localization={{
                     noRecordsToDisplay: error ? error : undefined
                 }}
-                renderToolbarInternalActions={({
-                    table
-                }) => {
-                    return <>
-                        <MRT_ShowHideColumnsButton table={table} />
-                        <MRT_ToggleFullScreenButton table={table} />
-                    </>;
+                renderTopToolbar={({ table }) => {
+                    return (
+                        <Box display="flex" alignItems="center">
+                            <Box display="flex" alignItems="center" sx={{ marginRight: 'auto' }}>
+                                <AddBoxIcon
+                                    sx={{
+                                        cursor: "pointer",
+                                        marginLeft: "10px",
+                                        '&:hover': {
+                                            background: "#fff",
+                                            color: "#000",
+                                            border: 'solid 1px #81980f',
+                                            borderRadius: "10px"
+                                        }
+                                    }}
+                                    fontSize='large'
+                                    titleAccess='Adicionar Novo Animal'
+                                    onClick={() => {
+                                        console.log("Clicou");
+                                    }}
+                                />
+                            </Box>
+                            <Box display="flex" alignItems="center">
+                                <MRT_ShowHideColumnsButton table={table} size='large' />
+                                <MRT_ToggleFullScreenButton table={table} size='large' />
+                            </Box>
+                        </Box>
+                    );
                 }}
                 muiTablePaperProps={{
                     sx: {
