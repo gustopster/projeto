@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Animal } from '../Types/AnimalsType';
-import { deleteAnimal, getAnimals, updateAnimal } from '../Services/Animals';
+import { createAnimal, deleteAnimal, getAnimals, updateAnimal } from '../Services/Animals';
 import { MaterialReactTable, MRT_ColumnDef, MRT_Row, MRT_ShowHideColumnsButton, MRT_TableOptions, MRT_ToggleFullScreenButton } from 'material-react-table';
 import { ThemeProvider } from '@emotion/react';
 import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from './ConfirmComponent/indexContext';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import { useCreateModal } from './CreateModalComponent/indexContext';
 
 const AnimalsComponent: React.FC = () => {
 
@@ -73,23 +74,6 @@ const AnimalsComponent: React.FC = () => {
         }
     });
 
-    const deleteUser = (id: number) => {
-        deleteAnimal(id).then((result) => {
-            if (result === 200) {
-                fetchAnimals();
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    };
-
-    const { handleOpen } = useConfirm();
-    const openDeleteConfirmModal = (row: MRT_Row<Animal>) => {
-        handleOpen(() => {
-            deleteUser(row.original.id);
-        });
-    };
-
     const [idForEdit, setIdForEdit] = useState<null | number>(null);
     const handleEditAnimal: MRT_TableOptions<Animal>['onEditingRowSave'] = async ({
         values,
@@ -105,6 +89,35 @@ const AnimalsComponent: React.FC = () => {
             });
         }
         table.setEditingRow(null);
+    };
+
+    const { handleOpenCreateModal } = useCreateModal<Animal>();
+    const openCreateModal = () => {
+        const columnTypes: Record<keyof Animal, string> = {
+            id: 'string',
+            dataColeta: 'date',
+            numeroIdIpram: 'string',
+            fai: 'string',
+            observacoes: 'string',
+        };
+        handleOpenCreateModal(columnTypes, (data) => {
+            createAnimal({ ...data, id: 0 }).then((result) => {
+                setAnimals((prevState) => [...prevState, result])
+            })
+        });
+    };
+
+    const { handleOpen } = useConfirm();
+    const openDeleteConfirmModal = (row: MRT_Row<Animal>) => {
+        handleOpen(() => {
+            deleteAnimal(row.original.id).then((result) => {
+                if (result === 204) {
+                    fetchAnimals();
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        });
     };
 
     return (
@@ -133,9 +146,7 @@ const AnimalsComponent: React.FC = () => {
                                     }}
                                     fontSize='large'
                                     titleAccess='Adicionar Novo Animal'
-                                    onClick={() => {
-                                        console.log("Clicou");
-                                    }}
+                                    onClick={openCreateModal}
                                 />
                             </Box>
                             <Box display="flex" alignItems="center">
