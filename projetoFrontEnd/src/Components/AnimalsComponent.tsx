@@ -1,32 +1,33 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Animal } from '../Types/AnimalsType';
-import { getAnimals } from '../Services/Animals';
-import { MaterialReactTable, MRT_ColumnDef, MRT_Row, MRT_ShowHideColumnsButton, MRT_ToggleFullScreenButton } from 'material-react-table';
+import { deleteAnimal, getAnimals, updateAnimal } from '../Services/Animals';
+import { MaterialReactTable, MRT_ColumnDef, MRT_Row, MRT_ShowHideColumnsButton, MRT_TableOptions, MRT_ToggleFullScreenButton } from 'material-react-table';
 import { ThemeProvider } from '@emotion/react';
 import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const AnimalsComponent: React.FC = () => {
+
     const [animals, setAnimals] = useState<Animal[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchAnimals = async () => {
-            try {
-                const data = await getAnimals();
-                setAnimals(data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.error(error.message);
-                    setError(error.message);
-                } else {
-                    console.error('Erro desconhecido');
-                    setError('Erro desconhecido');
-                }
+    const fetchAnimals = async () => {
+        try {
+            const data = await getAnimals();
+            setAnimals(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(error.message);
+                setError(error.message);
+            } else {
+                console.error('Erro desconhecido');
+                setError('Erro desconhecido');
             }
-        };
+        }
+    };
 
+    useEffect(() => {
         fetchAnimals();
     }, []);
 
@@ -44,10 +45,7 @@ const AnimalsComponent: React.FC = () => {
             accessorKey: 'dataColeta',
             Cell: ({ cell }) => {
                 const resultado = cell.getValue() as Date;
-
-                // Verifica se o resultado é uma data válida antes de formatar
                 const dataFormatada = resultado ? new Date(resultado).toLocaleDateString() : 'Data inválida';
-
                 return (
                     <span>
                         {dataFormatada}
@@ -82,7 +80,13 @@ const AnimalsComponent: React.FC = () => {
     });
 
     const deleteUser = (id: number) => {
-        console.log('deletar', id)
+        deleteAnimal(id).then((result) => {
+            if (result === 200) {
+                fetchAnimals();
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
     };
 
     const openDeleteConfirmModal = (row: MRT_Row<Animal>) => {
@@ -91,9 +95,27 @@ const AnimalsComponent: React.FC = () => {
         }
     };
 
+    const [idForEdit, setIdForEdit] = useState<null | number>(null);
+    const handleEditAnimal: MRT_TableOptions<Animal>['onEditingRowSave'] = async ({
+        values,
+        table,
+    }) => {
+        if (idForEdit) {
+            updateAnimal(idForEdit, values).then((result) => {
+                if (result === 204) {
+                    fetchAnimals();
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+        table.setEditingRow(null);
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <MaterialReactTable
+                onEditingRowSave={handleEditAnimal}
                 columns={columns}
                 data={animals}
                 localization={{
@@ -123,14 +145,20 @@ const AnimalsComponent: React.FC = () => {
                 enableStickyHeader={true}
                 enablePagination={false}
                 initialState={{
-                    showColumnFilters: true
+                    showColumnFilters: true,
+                    columnVisibility: {
+                        id: false
+                    }
                 }}
                 enableEditing={true}
                 renderRowActions={({ table, row }) => {
                     return (
                         <Box sx={{ display: 'flex', gap: '1rem' }}>
-                            <Tooltip title="Edit">
-                                <IconButton onClick={() => table.setEditingRow(row)}>
+                            <Tooltip title="Editar">
+                                <IconButton onClick={() => {
+                                    setIdForEdit(row.original.id);
+                                    table.setEditingRow(row);
+                                }}>
                                     <EditIcon />
                                 </IconButton>
                             </Tooltip>

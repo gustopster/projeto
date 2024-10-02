@@ -50,6 +50,10 @@ namespace Projeto.Controllers
             }
 
             existingAnimal.Name = updatedAnimal.Name;
+            existingAnimal.DataColeta = updatedAnimal.DataColeta;
+            existingAnimal.Fai = updatedAnimal.Fai;
+            existingAnimal.NumeroIdIpram = updatedAnimal.NumeroIdIpram;
+            existingAnimal.Observacoes = updatedAnimal.Observacoes;
             existingAnimal.Type = updatedAnimal.Type;
 
             _animalService.UpdateAnimal(existingAnimal);
