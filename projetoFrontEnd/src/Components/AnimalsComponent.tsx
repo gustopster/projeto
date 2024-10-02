@@ -35,12 +35,12 @@ const AnimalsComponent: React.FC = () => {
 
     const columns = useMemo<MRT_ColumnDef<Animal>[]>(() => [
         {
-            header: 'Nome',
-            accessorKey: 'name'
+            header: 'N IPRAM',
+            accessorKey: 'numeroIdIpram'
         },
         {
-            header: 'Tipo',
-            accessorKey: 'type'
+            header: 'FAI',
+            accessorKey: 'fai'
         },
         {
             header: 'Data de Coleta',
@@ -54,14 +54,6 @@ const AnimalsComponent: React.FC = () => {
                     </span>
                 );
             }
-        },
-        {
-            header: 'N IPRAM',
-            accessorKey: 'numeroIdIpram'
-        },
-        {
-            header: 'FAI',
-            accessorKey: 'fai'
         },
         {
             header: 'Observações',
