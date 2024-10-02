@@ -6,6 +6,7 @@ import { ThemeProvider } from '@emotion/react';
 import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useConfirm } from './ConfirmComponent/indexContext';
 
 const AnimalsComponent: React.FC = () => {
 
@@ -89,10 +90,11 @@ const AnimalsComponent: React.FC = () => {
         });
     };
 
+    const { handleOpen } = useConfirm();
     const openDeleteConfirmModal = (row: MRT_Row<Animal>) => {
-        if (window.confirm(`Você deseja realmente excluir "${row.original.name}"?`)) {
+        handleOpen(() => {
             deleteUser(row.original.id);
-        }
+        });
     };
 
     const [idForEdit, setIdForEdit] = useState<null | number>(null);
