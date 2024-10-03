@@ -53,6 +53,7 @@ namespace Projeto.Controllers
             existingAnimal.Fai = updatedAnimal.Fai;
             existingAnimal.NumeroIdIpram = updatedAnimal.NumeroIdIpram;
             existingAnimal.Observacoes = updatedAnimal.Observacoes;
+            existingAnimal.Tumor = updatedAnimal.Tumor;
 
             _animalService.UpdateAnimal(existingAnimal);
             return NoContent();

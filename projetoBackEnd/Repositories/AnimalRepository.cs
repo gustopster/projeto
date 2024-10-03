@@ -39,6 +39,7 @@ namespace Projeto.Repositories
                 existingAnimal.Fai = animal.Fai;
                 existingAnimal.NumeroIdIpram = animal.NumeroIdIpram;
                 existingAnimal.Observacoes = animal.Observacoes;
+                existingAnimal.Tumor = animal.Tumor;
                 _context.SaveChanges();
             }
         }

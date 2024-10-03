@@ -13,26 +13,39 @@ namespace Projeto.Data
         {
             modelBuilder.Entity<Animal>(entity =>
             {
-                entity.ToTable("Animals");
+                // Define a tabela e o esquema "projeto_nath"
+                entity.ToTable("Animals", "projeto_nath");
 
                 entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.DataColeta)
-                    .HasColumnName("data_coleta")
+                    .HasColumnName("DataColeta")
                     .HasColumnType("DATE");
 
                 entity.Property(e => e.NumeroIdIpram)
-                    .HasColumnName("numero_id_ipram")
+                    .HasColumnName("NumeroIdIpram")
                     .HasColumnType("TEXT");
 
                 entity.Property(e => e.Fai)
-                    .HasColumnName("fai")
+                    .HasColumnName("Fai")
                     .HasMaxLength(16);
 
+                entity.Property(e => e.Tumor)
+                    .HasColumnName("Tumor")
+                    .HasColumnType("TEXT");
+
+                entity.Property(e => e.Exames)
+                    .HasColumnName("Exames")
+                    .HasColumnType("TEXT");
+
+                entity.Property(e => e.Solicitante)
+                    .HasColumnName("Solicitante")
+                    .HasColumnType("TEXT");
+
                 entity.Property(e => e.Observacoes)
-                    .HasColumnName("observacoes")
+                    .HasColumnName("Observacoes")
                     .HasColumnType("TEXT")
-                    .IsRequired(false); // Observações também podem ser opcionais
+                    .IsRequired(false);
             });
         }
     }
