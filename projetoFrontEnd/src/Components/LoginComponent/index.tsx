@@ -7,11 +7,16 @@ const LoginComponent: React.FC = () => {
     const { login } = useAuth();
     const [username, setUsername] = useState('');
     const [open, setOpen] = useState(true);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (username) {
-            login(username);
-            setOpen(false);
+            const success = await login(username);
+            if (success) {
+                setOpen(false);
+            } else {
+                setErrorMessage('Usuário não encontrado.');
+            }
         }
     };
 
@@ -63,6 +68,7 @@ const LoginComponent: React.FC = () => {
                         onChange={(e) => setUsername(e.target.value)}
                         sx={{ bgcolor: 'background.default' }}
                     />
+                    {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Mostra o erro, se houver */}
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                         <Button color="secondary" onClick={handleCancel}>
                             Cancelar

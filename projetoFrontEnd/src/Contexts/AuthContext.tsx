@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
+import { getSolicitanteByName, getSolicitantes } from '../Services/Solicitantes'; // Importar o serviço de solicitantes
 
 interface AuthContextType {
     isAuthenticated: boolean;
     username: string | null;
-    login: (username: string) => void;
+    login: (username: string) => Promise<boolean>;
     logout: () => void;
 }
 
@@ -13,9 +14,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [username, setUsername] = useState<string | null>(null);
 
-    const login = (user: string) => {
-        setIsAuthenticated(true);
-        setUsername(user);
+    const login = async (user: string): Promise<boolean> => {
+        try {
+            const solicitante = await getSolicitanteByName(user);
+            if (solicitante && solicitante.nome) {
+                setIsAuthenticated(true);
+                setUsername(solicitante.nome);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error("Erro ao tentar fazer login", error);
+            return false;
+        }
     };
 
     const logout = () => {

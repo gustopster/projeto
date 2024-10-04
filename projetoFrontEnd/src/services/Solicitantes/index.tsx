@@ -65,3 +65,15 @@ export const getSolicitanteById = async (id: number): Promise<Solicitante> => {
         throw error;
     }
 };
+
+export const getSolicitanteByName = async (nome: string): Promise<Solicitante> => {
+    try {
+        const response = await api.get<Solicitante>(`/api/solicitantes/por-nome/${nome}`);
+        return response.data;
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            throw new Error(`Erro ao buscar o solicitante com nome ${nome}`);
+        }
+        throw error;
+    }
+};
