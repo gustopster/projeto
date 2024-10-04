@@ -22,6 +22,10 @@ namespace Projeto.Services
         {
             return _solicitanteRepository.GetSolicitanteById(id);
         }
+        public Solicitante GetSolicitanteByName(string nome)
+        {
+            return _solicitanteRepository.GetSolicitanteByName(nome);
+        }
 
         public void AddSolicitante(Solicitante solicitante)
         {

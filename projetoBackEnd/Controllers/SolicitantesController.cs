@@ -68,5 +68,17 @@ namespace Projeto.Controllers
             _solicitanteService.DeleteSolicitante(id);
             return NoContent();
         }
+
+        [HttpGet("por-nome/{nome}")]
+        public IActionResult GetSolicitanteByName(string nome)
+        {
+            var solicitante = _solicitanteService.GetSolicitanteByName(nome);
+            if (solicitante == null)
+            {
+                return NotFound();
+            }
+            return Ok(solicitante);
+        }
+
     }
 }

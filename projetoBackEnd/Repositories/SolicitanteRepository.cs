@@ -44,5 +44,9 @@ namespace Projeto.Repositories
                 _context.SaveChanges();
             }
         }
+        public Solicitante GetSolicitanteByName(string nome)
+        {
+            return _context.Solicitantes.FirstOrDefault(s => s.Nome.ToLower() == nome.ToLower());
+        }
     }
 }
