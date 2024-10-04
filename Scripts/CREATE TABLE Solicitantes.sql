@@ -1,0 +1,5 @@
+CREATE TABLE Solicitantes (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nome TEXT NULL,
+    Permissao TEXT NULL
+);
