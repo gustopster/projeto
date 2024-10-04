@@ -1,8 +1,10 @@
 import React from 'react';
 import { AppBar, Toolbar, Box, Link } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 const HeaderComponent: React.FC = () => {
+    const location = useLocation();
+
     return (
         <AppBar
             position="static"
@@ -24,8 +26,11 @@ const HeaderComponent: React.FC = () => {
                         to="/animais/"
                         underline='none'
                         variant='h6'
-                        color="inherit"
-                        sx={{ margin: '0 8px' }}
+                        color={location.pathname === '/animais/' ? 'success' : 'inherit'}
+                        sx={{
+                            margin: '0 8px',
+                            fontWeight: location.pathname === '/animais/' ? 'bold' : 'normal',
+                        }}
                         title='Acessar tabela de Animais'>
                         Animais
                     </Link>
@@ -34,8 +39,11 @@ const HeaderComponent: React.FC = () => {
                         to="/solicitantes/"
                         underline='none'
                         variant='h6'
-                        color="inherit"
-                        sx={{ margin: '0 8px' }}
+                        color={location.pathname === '/solicitantes/' ? 'success' : 'inherit'}
+                        sx={{
+                            margin: '0 8px',
+                            fontWeight: location.pathname === '/solicitantes/' ? 'bold' : 'normal',
+                        }}
                         title='Acessar tabela de Solicitantes'>
                         Solicitantes
                     </Link>
@@ -44,8 +52,11 @@ const HeaderComponent: React.FC = () => {
                         to="/exames/"
                         underline='none'
                         variant='h6'
-                        color="inherit"
-                        sx={{ margin: '0 8px' }}
+                        color={location.pathname === '/exames/' ? 'success' : 'inherit'}
+                        sx={{
+                            margin: '0 8px',
+                            fontWeight: location.pathname === '/exames/' ? 'bold' : 'normal',
+                        }}
                         title='Acessar tabela de Exames'>
                         Exames
                     </Link>
