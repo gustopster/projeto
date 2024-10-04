@@ -56,6 +56,14 @@ const CreateModalComponent = <T extends BaseType>({
                 "Com Tumor (Grave)"
             ];
         }
+
+        if (coluna === 'permissao') {
+            return [
+                "Moderador",
+                "Visitante"
+            ];
+        }
+
         return ["AAA", "BBB", "CCC"];
     };
 

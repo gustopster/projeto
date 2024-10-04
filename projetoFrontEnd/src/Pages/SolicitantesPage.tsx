@@ -1,9 +1,8 @@
 import React from 'react';
+import SolicitantesComponent from '../Components/SolicitantesComponent';
 
 const SolicitantesPage: React.FC = () => {
-    return <div style={{
-        color: "#fff"
-    }}>Tabela de Solicitantes</div>;
+    return <SolicitantesComponent />;
 };
 
 export default SolicitantesPage;

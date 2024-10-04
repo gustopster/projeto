@@ -1,11 +1,11 @@
 import { BaseType } from "./BaseType";
 
 export interface Animal extends BaseType {
-    dataColeta?: Date;
+    dataColeta: Date;
     numeroIdIpram?: string;
-    fai?: string;
+    fai: string;
     observacoes?: string;
-    tumor?: string;
-    exames?: string;
-    solicitante?: string;
+    tumor: string;
+    exames: string;
+    solicitante: string;
 }
