@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Animal } from '../Types/AnimalsType';
-import { createAnimal, deleteAnimal, getAnimals, updateAnimal } from '../Services/Animals';
+import { Animal } from '../../Types/AnimalsType';
+import { createAnimal, deleteAnimal, getAnimals, updateAnimal } from '../../Services/Animals';
 import { MaterialReactTable, MRT_ColumnDef, MRT_Row, MRT_ShowHideColumnsButton, MRT_TableOptions, MRT_ToggleFullScreenButton } from 'material-react-table';
 import { ThemeProvider } from '@emotion/react';
 import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useConfirm } from './ConfirmComponent/indexContext';
+import { useConfirm } from '../ConfirmComponent/indexContext';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { useCreateModal } from './CreateModalComponent/indexContext';
+import { useCreateModal } from '../CreateModalComponent/indexContext';
 
 const AnimalsComponent: React.FC = () => {
 
