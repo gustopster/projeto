@@ -1,4 +1,3 @@
-// Services/Solicitantes/index.ts
 import { AxiosError, AxiosResponse } from "axios";
 import api from "../api";
 import { Solicitante } from "../../Types/Solicitante"; // Importando a interface Solicitante
@@ -66,13 +65,41 @@ export const getSolicitanteById = async (id: number): Promise<Solicitante> => {
     }
 };
 
-export const getSolicitanteByName = async (nome: string): Promise<Solicitante> => {
+export const getSolicitanteByName = async (nome: string): Promise<boolean | AxiosError> => {
     try {
-        const response = await api.get<Solicitante>(`/api/solicitantes/por-nome/${nome}`);
+        const response = await api.get<boolean>(`/api/solicitantes/por-nome/${nome}`);
+        if (response instanceof AxiosError) {
+            return response;
+        } else {
+            return response.data;
+        }
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            throw error;
+        }
+        throw error;
+    }
+};
+
+export const verificarSenha = async (request: { nome: string; senha: string }): Promise<boolean> => {
+    try {
+        const response = await api.post<boolean>('/api/solicitantes/verificar-senha', request);
         return response.data;
     } catch (error) {
         if (error instanceof AxiosError) {
-            throw new Error(`Erro ao buscar o solicitante com nome ${nome}`);
+            throw new Error('Erro ao verificar senha');
+        }
+        throw error;
+    }
+};
+
+export const definirSenha = async (request: { nome: string; senha: string }): Promise<boolean> => {
+    try {
+        const response = await api.post<boolean>('/api/solicitantes/definir-senha', request);
+        return response.data;
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            throw new Error('Erro ao definir senha');
         }
         throw error;
     }

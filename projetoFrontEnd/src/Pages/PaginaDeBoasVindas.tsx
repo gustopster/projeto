@@ -32,7 +32,7 @@ const PaginaDeBoasVindas: React.FC<PaginaDeBoasVindasProps> = ({ nomeDoUsuario }
                     color: '#fff',
                 }}
             >
-                <h1>Bem-vindo ao Sistema, {nomeDoUsuario}!</h1>
+                <h1>Bem-vindo ao Sistema, {nomeDoUsuario.toUpperCase()}!</h1>
             </Box>
         </ThemeProvider>
     );
