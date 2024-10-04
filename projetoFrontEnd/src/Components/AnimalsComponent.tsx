@@ -59,6 +59,18 @@ const AnimalsComponent: React.FC = () => {
         {
             header: 'Observações',
             accessorKey: 'observacoes'
+        },
+        {
+            header: 'Exames',
+            accessorKey: 'exames'
+        },
+        {
+            header: 'Tumor',
+            accessorKey: 'tumor'
+        },
+        {
+            header: 'Solicitante',
+            accessorKey: 'solicitante'
         }
     ], []);
 
@@ -99,6 +111,9 @@ const AnimalsComponent: React.FC = () => {
             numeroIdIpram: 'string',
             fai: 'string',
             observacoes: 'string',
+            exames: 'comboBox',
+            solicitante: 'comboBox',
+            tumor: 'comboBox',
         };
         handleOpenCreateModal(columnTypes, (data) => {
             createAnimal({ ...data, id: 0 }).then((result) => {

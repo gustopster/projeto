@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, Box, TextField, Button, ThemeProvider, createTheme } from '@mui/material';
+import { Modal, Box, TextField, Button, ThemeProvider, createTheme, Autocomplete } from '@mui/material';
 import { BaseType } from '../../Types/BaseType';
 
 interface CreateModalComponentProps<T extends BaseType> {
@@ -9,12 +9,11 @@ interface CreateModalComponentProps<T extends BaseType> {
     onSubmit: (data: T) => void;
 }
 
-// Função para formatar camelCase para texto legível
 const formatLabel = (text: string): string => {
     return text
-        .replace(/([a-z])([A-Z])/g, '$1 $2') // Insere espaço antes de letras maiúsculas
-        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2') // Insere espaço entre letras maiúsculas seguidas por minúsculas
-        .replace(/^./, (str) => str.toUpperCase()); // Coloca a primeira letra em maiúscula
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+        .replace(/^./, (str) => str.toUpperCase());
 };
 
 const CreateModalComponent = <T extends BaseType>({
@@ -48,6 +47,18 @@ const CreateModalComponent = <T extends BaseType>({
         },
     });
 
+    const handleAutoComplete = (coluna: string) => {
+        if (coluna === 'tumor') {
+            return [
+                "Sem Tumor",
+                "Com Tumor (Leve)",
+                "Com Tumor (Moderado)",
+                "Com Tumor (Grave)"
+            ];
+        }
+        return ["AAA", "BBB", "CCC"];
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <Modal open={open} onClose={onClose}>
@@ -57,7 +68,8 @@ const CreateModalComponent = <T extends BaseType>({
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: 400,
+                        width: 500,
+                        height: 500,
                         bgcolor: 'background.paper',
                         boxShadow: 24,
                         p: 4,
@@ -66,20 +78,32 @@ const CreateModalComponent = <T extends BaseType>({
                         flexDirection: 'column',
                         gap: 2,
                         color: '#fff',
+                        overflow: "auto"
                     }}
                 >
                     <h2>Criação de novo registro</h2>
                     {Object.entries(columnTypes)
                         .filter(([column]) => column !== 'id')
                         .map(([column, type]) => (
-                            <TextField
-                                key={column}
-                                label={formatLabel(column as string)} // Chama a função de formatação
-                                type={type === 'date' ? 'date' : 'text'}
-                                onChange={(e) => handleChange(column as keyof T, e.target.value)}
-                                InputLabelProps={type === 'date' ? { shrink: true } : {}}
-                                InputProps={type === 'date' ? { type: 'date' } : {}}
-                            />
+                            type === 'comboBox' ? (
+                                <Autocomplete
+                                    key={column}
+                                    options={handleAutoComplete(column)}
+                                    onChange={(_, value) => handleChange(column as keyof T, value)}
+                                    renderInput={(params) => (
+                                        <TextField {...params} label={formatLabel(column as string)} />
+                                    )}
+                                />
+                            ) : (
+                                <TextField
+                                    key={column}
+                                    label={formatLabel(column as string)}
+                                    type={type === 'date' ? 'date' : 'text'}
+                                    onChange={(e) => handleChange(column as keyof T, e.target.value)}
+                                    InputLabelProps={type === 'date' ? { shrink: true } : {}}
+                                    InputProps={type === 'date' ? { type: 'date' } : {}}
+                                />
+                            )
                         ))}
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                         <Button onClick={onClose} color="secondary">

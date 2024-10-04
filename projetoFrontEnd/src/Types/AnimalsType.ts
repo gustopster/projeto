@@ -5,4 +5,7 @@ export interface Animal extends BaseType {
     numeroIdIpram?: string;
     fai?: string;
     observacoes?: string;
+    tumor?: string;
+    exames?: string;
+    solicitante?: string;
 }
