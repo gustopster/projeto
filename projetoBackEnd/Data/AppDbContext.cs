@@ -43,6 +43,7 @@ namespace Projeto.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Nome).HasColumnName("Nome").HasColumnType("TEXT");
                 entity.Property(e => e.Permissao).HasColumnName("Permissao").HasColumnType("TEXT");
+                entity.Property(e => e.Senha).HasColumnName("Senha").HasColumnType("TEXT");
             });
         }
     }

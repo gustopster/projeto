@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Models;
 using Projeto.Services;
+using projetoBackEnd.Models;
 
 namespace Projeto.Controllers
 {
@@ -51,6 +52,7 @@ namespace Projeto.Controllers
 
             existingSolicitante.Nome = updatedSolicitante.Nome;
             existingSolicitante.Permissao = updatedSolicitante.Permissao;
+            existingSolicitante.Senha = updatedSolicitante.Senha;
 
             _solicitanteService.UpdateSolicitante(existingSolicitante);
             return NoContent();
@@ -70,15 +72,53 @@ namespace Projeto.Controllers
         }
 
         [HttpGet("por-nome/{nome}")]
-        public IActionResult GetSolicitanteByName(string nome)
+        public IActionResult VerificarSolicitantePorNome(string nome)
         {
             var solicitante = _solicitanteService.GetSolicitanteByName(nome);
             if (solicitante == null)
             {
-                return NotFound();
+                return NotFound("Solicitante não encontrado.");
             }
-            return Ok(solicitante);
+
+            if (_solicitanteService.IsFirstTimeUser(solicitante))
+            {
+                return Ok(false);
+            }
+
+            return Ok(true);
         }
 
+        [HttpPost("verificar-senha")]
+        public IActionResult VerificarSenha([FromBody] VerificarSenhaRequest request)
+        {
+            // Verifica a senha, assumindo que o solicitante já foi autenticado anteriormente
+            bool senhaCorreta = _solicitanteService.VerificarSenha(request);
+
+            if (!senhaCorreta)
+            {
+                return Unauthorized(false);
+            }
+
+            return Ok(true);
+        }
+
+
+        [HttpPost("definir-senha")]
+        public IActionResult DefinirSenha([FromBody] DefinirSenhaRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Senha))
+            {
+                return Unauthorized(false);
+            }
+
+            var solicitante = _solicitanteService.GetSolicitanteByName(request.Nome);
+
+            if (solicitante == null)
+            {
+                return NotFound(false);
+            }
+
+            return Ok(_solicitanteService.DefinirSenha(solicitante, request.Senha));
+        }
     }
 }

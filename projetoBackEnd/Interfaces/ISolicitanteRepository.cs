@@ -9,6 +9,8 @@ namespace Projeto.Interfaces
         Solicitante GetSolicitanteByName(string nome);
         void AddSolicitante(Solicitante solicitante);
         void UpdateSolicitante(Solicitante solicitante);
+        bool DefinirSenha(Solicitante solicitante, string senha);
+        bool IsFirstTimeUser(Solicitante solicitante);
         void DeleteSolicitante(int id);
     }
 }

@@ -1,6 +1,7 @@
 using Projeto.Data;
 using Projeto.Interfaces;
 using Projeto.Models;
+using System.Linq;
 
 namespace Projeto.Repositories
 {
@@ -44,9 +45,24 @@ namespace Projeto.Repositories
                 _context.SaveChanges();
             }
         }
+
         public Solicitante GetSolicitanteByName(string nome)
         {
             return _context.Solicitantes.FirstOrDefault(s => s.Nome.ToLower() == nome.ToLower());
         }
+
+        public bool IsFirstTimeUser(Solicitante solicitante)
+        {
+            return string.IsNullOrEmpty(solicitante.Senha);
+        }
+
+        public bool DefinirSenha(Solicitante solicitante, string senha)
+        {
+            solicitante.Senha = senha;
+            _context.Solicitantes.Update(solicitante);
+
+            return _context.SaveChanges() > 0;
+        }
+
     }
 }

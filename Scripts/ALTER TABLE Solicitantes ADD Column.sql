@@ -1,0 +1,2 @@
+ALTER TABLE Solicitantes
+ADD COLUMN Senha VARCHAR(16) NULL;
