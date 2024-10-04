@@ -6,12 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     new MySqlServerVersion(new Version(8, 0, 21))));
 
-// Configuração de CORS
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
 builder.Services.AddCors(options =>
@@ -29,7 +27,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAnimalRepository, AnimalRepository>();
+builder.Services.AddScoped<ISolicitanteRepository, SolicitanteRepository>();
+builder.Services.AddScoped<IExameRepository, ExameRepository>();
 builder.Services.AddScoped<AnimalService>();
+builder.Services.AddScoped<SolicitanteService>();
+builder.Services.AddScoped<ExameService>();
 
 var app = builder.Build();
 
