@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Models;
+using Projeto.Models.DTO;
 using Projeto.Services;
 using projetoBackEnd.Models;
 
@@ -42,7 +43,7 @@ namespace Projeto.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateSolicitante(int id, [FromBody] Solicitante updatedSolicitante)
+        public IActionResult UpdateSolicitante(int id, [FromBody] SolicitanteDTO updatedSolicitanteDto)
         {
             var existingSolicitante = _solicitanteService.GetSolicitanteById(id);
             if (existingSolicitante == null)
@@ -50,9 +51,8 @@ namespace Projeto.Controllers
                 return NotFound();
             }
 
-            existingSolicitante.Nome = updatedSolicitante.Nome;
-            existingSolicitante.Permissao = updatedSolicitante.Permissao;
-            existingSolicitante.Senha = updatedSolicitante.Senha;
+            existingSolicitante.Nome = updatedSolicitanteDto.Nome;
+            existingSolicitante.Permissao = updatedSolicitanteDto.Permissao;
 
             _solicitanteService.UpdateSolicitante(existingSolicitante);
             return NoContent();

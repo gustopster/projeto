@@ -1,5 +1,6 @@
 using Projeto.Interfaces;
 using Projeto.Models;
+using Projeto.Models.DTO;
 using projetoBackEnd.Models;
 
 namespace Projeto.Services
@@ -13,14 +14,28 @@ namespace Projeto.Services
             _solicitanteRepository = solicitanteRepository;
         }
 
-        public IEnumerable<Solicitante> GetAllSolicitantes()
+        private SolicitanteDTO MapToDTO(Solicitante solicitante)
         {
-            return _solicitanteRepository.GetAllSolicitantes();
+            return new SolicitanteDTO
+            {
+                Id = solicitante.Id,
+                Nome = solicitante.Nome,
+                Permissao = solicitante.Permissao
+            };
         }
 
-        public Solicitante GetSolicitanteById(int id)
+
+        public IEnumerable<SolicitanteDTO> GetAllSolicitantes()
         {
-            return _solicitanteRepository.GetSolicitanteById(id);
+            var solicitantes = _solicitanteRepository.GetAllSolicitantes();
+            return solicitantes.Select(solicitante => MapToDTO(solicitante));
+        }
+
+
+        public SolicitanteDTO GetSolicitanteById(int id)
+        {
+            var solicitante = _solicitanteRepository.GetSolicitanteById(id);
+            return solicitante != null ? MapToDTO(solicitante) : null;
         }
 
         public void AddSolicitante(Solicitante solicitante)
@@ -28,9 +43,12 @@ namespace Projeto.Services
             _solicitanteRepository.AddSolicitante(solicitante);
         }
 
-        public void UpdateSolicitante(Solicitante solicitante)
+        public void UpdateSolicitante(SolicitanteDTO solicitante)
         {
-            _solicitanteRepository.UpdateSolicitante(solicitante);
+            var existingSolicitante = new Solicitante();
+            existingSolicitante.Nome = solicitante.Nome;
+            existingSolicitante.Permissao = solicitante.Permissao;
+            _solicitanteRepository.UpdateSolicitante(existingSolicitante);
         }
 
         public void DeleteSolicitante(int id)
@@ -58,9 +76,9 @@ namespace Projeto.Services
 
             return solicitante.Senha == request.Senha;
         }
+
         public bool IsFirstTimeUser(Solicitante solicitante)
         {
-            // Verifica se a senha é nula ou vazia
             return string.IsNullOrEmpty(solicitante.Senha);
         }
     }
