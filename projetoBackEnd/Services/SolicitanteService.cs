@@ -31,24 +31,19 @@ namespace Projeto.Services
             return solicitantes.Select(solicitante => MapToDTO(solicitante));
         }
 
-
-        public SolicitanteDTO GetSolicitanteById(int id)
+        public Solicitante GetSolicitanteById(int id)
         {
-            var solicitante = _solicitanteRepository.GetSolicitanteById(id);
-            return solicitante != null ? MapToDTO(solicitante) : null;
+            return _solicitanteRepository.GetSolicitanteById(id);
         }
 
-        public void AddSolicitante(Solicitante solicitante)
+        public void AddSolicitante(SolicitanteDTO solicitante)
         {
             _solicitanteRepository.AddSolicitante(solicitante);
         }
 
-        public void UpdateSolicitante(SolicitanteDTO solicitante)
+        public void UpdateSolicitante(Solicitante solicitante)
         {
-            var existingSolicitante = new Solicitante();
-            existingSolicitante.Nome = solicitante.Nome;
-            existingSolicitante.Permissao = solicitante.Permissao;
-            _solicitanteRepository.UpdateSolicitante(existingSolicitante);
+            _solicitanteRepository.UpdateSolicitante(solicitante);
         }
 
         public void DeleteSolicitante(int id)

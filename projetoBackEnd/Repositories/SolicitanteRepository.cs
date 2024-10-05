@@ -1,6 +1,7 @@
 using Projeto.Data;
 using Projeto.Interfaces;
 using Projeto.Models;
+using Projeto.Models.DTO;
 using System.Linq;
 
 namespace Projeto.Repositories
@@ -24,15 +25,23 @@ namespace Projeto.Repositories
             return _context.Solicitantes.Find(id);
         }
 
-        public void AddSolicitante(Solicitante solicitante)
+        public void AddSolicitante(SolicitanteDTO solicitante)
         {
-            _context.Solicitantes.Add(solicitante);
+            var existingSolicitante = new Solicitante(
+                solicitante.Id,
+                solicitante.Nome,
+                solicitante.Permissao
+            );
+
+            _context.Solicitantes.Add(existingSolicitante);
             _context.SaveChanges();
         }
 
+
         public void UpdateSolicitante(Solicitante solicitante)
         {
-            _context.Solicitantes.Update(solicitante);
+            // Aqui você pode usar a abordagem de marcar a entidade como modificada
+            _context.Solicitantes.Update(solicitante); // Somente se necessário; pode ser redundante se já estiver sendo rastreada
             _context.SaveChanges();
         }
 

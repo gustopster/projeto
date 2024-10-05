@@ -1,4 +1,5 @@
 using Projeto.Models;
+using Projeto.Models.DTO;
 
 namespace Projeto.Interfaces
 {
@@ -7,7 +8,7 @@ namespace Projeto.Interfaces
         IEnumerable<Solicitante> GetAllSolicitantes();
         Solicitante GetSolicitanteById(int id);
         Solicitante GetSolicitanteByName(string nome);
-        void AddSolicitante(Solicitante solicitante);
+        void AddSolicitante(SolicitanteDTO solicitante);
         void UpdateSolicitante(Solicitante solicitante);
         bool DefinirSenha(Solicitante solicitante, string senha);
         bool IsFirstTimeUser(Solicitante solicitante);

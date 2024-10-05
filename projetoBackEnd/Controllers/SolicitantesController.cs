@@ -36,7 +36,7 @@ namespace Projeto.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateSolicitante([FromBody] Solicitante newSolicitante)
+        public IActionResult CreateSolicitante([FromBody] SolicitanteDTO newSolicitante)
         {
             _solicitanteService.AddSolicitante(newSolicitante);
             return CreatedAtAction(nameof(GetSolicitanteById), new { id = newSolicitante.Id }, newSolicitante);
