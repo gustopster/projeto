@@ -97,7 +97,7 @@ const LoginComponent: React.FC = () => {
                         label="Usuário"
                         variant="outlined"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setUsername(e.target.value.toUpperCase())}
                         sx={{ bgcolor: 'background.default' }}
                         disabled={mostrarCampoSenha || senhaVazia}
                     />

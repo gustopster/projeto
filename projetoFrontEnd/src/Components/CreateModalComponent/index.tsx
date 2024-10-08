@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Modal, Box, TextField, Button, ThemeProvider, createTheme, Autocomplete } from '@mui/material';
 import { BaseType } from '../../Types/BaseType';
+import { getExames } from '../../Services/Exames';
+import { useAuth } from '../../Contexts/AuthContext';
 
 interface CreateModalComponentProps<T extends BaseType> {
     open: boolean;
-    columnTypes: Record<keyof T, string>; // Ajuste aqui
+    columnTypes: Record<keyof T, string>;
     onClose: () => void;
     onSubmit: (data: T) => void;
 }
@@ -23,6 +25,9 @@ const CreateModalComponent = <T extends BaseType>({
     onSubmit,
 }: CreateModalComponentProps<T>) => {
     const [formData, setFormData] = useState<Partial<T>>({});
+    const [options, setOptions] = useState<string[]>([]);
+    const [currentColumn, setCurrentColumn] = useState<string>('');
+    const { username } = useAuth();
 
     const handleChange = (column: keyof T, value: any) => {
         setFormData((prev) => ({
@@ -47,7 +52,7 @@ const CreateModalComponent = <T extends BaseType>({
         },
     });
 
-    const handleAutoComplete = (coluna: string) => {
+    const handleAutoComplete = useCallback(async (coluna: string) => {
         if (coluna === 'tumor') {
             return [
                 "Sem Tumor",
@@ -64,8 +69,29 @@ const CreateModalComponent = <T extends BaseType>({
             ];
         }
 
-        return ["AAA", "BBB", "CCC"];
-    };
+        if (coluna === 'exames') {
+            try {
+                const result = await getExames();
+                const exames = result.map(values => values.nome);
+                return exames;
+            } catch (error) {
+                console.error(error);
+                return [];
+            }
+        }
+
+        if (coluna === 'solicitante' && username) {
+            return [username]
+        }
+        return [];
+    }, []);
+
+    useEffect(() => {
+        setOptions([]);
+        if (currentColumn) {
+            handleAutoComplete(currentColumn).then(setOptions);
+        }
+    }, [currentColumn, handleAutoComplete]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -96,11 +122,15 @@ const CreateModalComponent = <T extends BaseType>({
                             type === 'comboBox' ? (
                                 <Autocomplete
                                     key={column}
-                                    options={handleAutoComplete(column)}
+                                    options={currentColumn === column ? options : []}
+                                    onFocus={() => setCurrentColumn(column)}
                                     onChange={(_, value) => handleChange(column as keyof T, value)}
+                                    value={column === 'solicitante' ? username : undefined}
+                                    disabled={column === 'solicitante' && username !== null}
                                     renderInput={(params) => (
                                         <TextField {...params} label={formatLabel(column as string)} />
                                     )}
+                                    noOptionsText={"Carregando..."}
                                 />
                             ) : (
                                 <TextField
