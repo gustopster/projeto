@@ -49,11 +49,13 @@ namespace Projeto.Controllers
                 return NotFound();
             }
 
-            existingAnimal.DataColeta = updatedAnimal.DataColeta;
-            existingAnimal.Fai = updatedAnimal.Fai;
             existingAnimal.NumeroIdIpram = updatedAnimal.NumeroIdIpram;
+            existingAnimal.Fai = updatedAnimal.Fai;
+            existingAnimal.DataColeta = updatedAnimal.DataColeta;
             existingAnimal.Observacoes = updatedAnimal.Observacoes;
+            existingAnimal.Exames = updatedAnimal.Exames;
             existingAnimal.Tumor = updatedAnimal.Tumor;
+            existingAnimal.Solicitante = updatedAnimal.Solicitante;
 
             _animalService.UpdateAnimal(existingAnimal);
             return NoContent();

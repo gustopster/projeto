@@ -35,11 +35,13 @@ namespace Projeto.Repositories
             var existingAnimal = _context.Animals.Find(animal.Id);
             if (existingAnimal != null)
             {
-                existingAnimal.DataColeta = animal.DataColeta;
-                existingAnimal.Fai = animal.Fai;
                 existingAnimal.NumeroIdIpram = animal.NumeroIdIpram;
+                existingAnimal.Fai = animal.Fai;
+                existingAnimal.DataColeta = animal.DataColeta;
                 existingAnimal.Observacoes = animal.Observacoes;
+                existingAnimal.Exames = animal.Exames;
                 existingAnimal.Tumor = animal.Tumor;
+                existingAnimal.Solicitante = animal.Solicitante;
                 _context.SaveChanges();
             }
         }

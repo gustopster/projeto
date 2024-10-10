@@ -10,7 +10,7 @@ namespace Projeto.Data
         public DbSet<Animal> Animals { get; set; }
         public DbSet<Exame> Exames { get; set; }
         public DbSet<Solicitante> Solicitantes { get; set; }
-
+        public DbSet<Especie> Especies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +44,14 @@ namespace Projeto.Data
                 entity.Property(e => e.Nome).HasColumnName("Nome").HasColumnType("TEXT");
                 entity.Property(e => e.Permissao).HasColumnName("Permissao").HasColumnType("TEXT");
                 entity.Property(e => e.Senha).HasColumnName("Senha").HasColumnType("TEXT");
+            });
+
+            // Mapeamento da entidade Especie
+            modelBuilder.Entity<Especie>(entity =>
+            {
+                entity.ToTable("Especies", "projeto_nath");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nome).HasColumnName("Nome").HasColumnType("TEXT");
             });
         }
     }

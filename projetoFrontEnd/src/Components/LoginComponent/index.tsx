@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../Contexts/AuthContext';
 import { ThemeProvider } from '@emotion/react';
-import { Modal, Box, TextField, Button, createTheme } from '@mui/material';
+import { Modal, Box, TextField, Button, createTheme, CircularProgress } from '@mui/material';
 import { AxiosError } from 'axios';
 
 const LoginComponent: React.FC = () => {
@@ -12,9 +12,11 @@ const LoginComponent: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [mostrarCampoSenha, setMostrarCampoSenha] = useState<boolean>(false);
     const [senhaVazia, setSenhaVazia] = useState<boolean>(false);
+    const [isLoading, setIsloading] = useState(false);
 
     const handleLogin = async () => {
         if (username) {
+            setIsloading(true);
             const success = await login(username);
             if (success instanceof AxiosError) {
                 setErrorMessage(success.response?.data as string);
@@ -28,16 +30,17 @@ const LoginComponent: React.FC = () => {
                     setMostrarCampoSenha(false);
                 }
             }
+            setIsloading(false);
         }
     };
 
     const handleVerificarSenha = async () => {
         if (username && senha) {
+            setIsloading(true);
             try {
                 const resultado = senhaVazia
                     ? await authSenhaDefinir(username, senha)
                     : await authSenha(username, senha);
-                console.log(resultado)
                 if (resultado instanceof AxiosError) {
                     setIsAuthenticated(false);
                     setErrorMessage('Senha Inválida.');
@@ -49,8 +52,9 @@ const LoginComponent: React.FC = () => {
                     setErrorMessage('Erro ao verificar a senha.');
                 }
             }
+            setIsloading(false);
         }
-    };    
+    };
 
     const handleCancel = () => {
         window.location.reload();
@@ -124,23 +128,31 @@ const LoginComponent: React.FC = () => {
                         />
                     )}
                     {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                        <Button color="secondary" onClick={handleCancel}>
-                            Cancelar
-                        </Button>
-                        {mostrarCampoSenha || senhaVazia ? (
-                            <Button variant="contained" color="primary" onClick={handleVerificarSenha}>
-                                {senhaVazia ? 'Definir Senha' : 'Autenticar'}
-                            </Button>
+                    {
+                        isLoading ? (
+                            <CircularProgress color='inherit' sx={{
+                                marginLeft: '45%'
+                            }} />
                         ) : (
-                            <Button variant="contained" color="primary" onClick={handleLogin}>
-                                Login
-                            </Button>
-                        )}
-                    </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                                <Button color="secondary" onClick={handleCancel}>
+                                    Cancelar
+                                </Button>
+                                {mostrarCampoSenha || senhaVazia ? (
+                                    <Button variant="contained" color="primary" onClick={handleVerificarSenha}>
+                                        {senhaVazia ? 'Definir Senha' : 'Autenticar'}
+                                    </Button>
+                                ) : (
+                                    <Button variant="contained" color="primary" onClick={handleLogin}>
+                                        Login
+                                    </Button>
+                                )}
+                            </Box>
+                        )
+                    }
                 </Box>
             </Modal>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 };
 

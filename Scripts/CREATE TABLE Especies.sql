@@ -1,0 +1,4 @@
+CREATE TABLE Especies (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nome TEXT NULL
+);

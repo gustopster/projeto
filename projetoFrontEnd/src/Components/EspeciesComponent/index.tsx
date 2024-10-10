@@ -1,6 +1,7 @@
+// src/Components/EspeciesComponent.tsx
+
 import { useEffect, useMemo, useState } from 'react';
-import { Animal } from '../../Types/AnimalsType';
-import { createAnimal, deleteAnimal, getAnimals, updateAnimal } from '../../Services/Animals';
+import { createEspecie, deleteEspecie, getEspecies, updateEspecie } from '../../Services/Especies';
 import { MaterialReactTable, MRT_ColumnDef, MRT_Row, MRT_ShowHideColumnsButton, MRT_TableOptions, MRT_ToggleFullScreenButton } from 'material-react-table';
 import { ThemeProvider } from '@emotion/react';
 import { Box, createTheme, IconButton, Tooltip } from '@mui/material';
@@ -9,16 +10,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from '../ConfirmComponent/indexContext';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { useCreateModal } from '../CreateModalComponent/indexContext';
+import { Especie } from '../../Types/Especie';
 
-const AnimalsComponent: React.FC = () => {
-
-    const [animals, setAnimals] = useState<Animal[]>([]);
+const EspeciesComponent: React.FC = () => {
+    const [Especies, setEspecies] = useState<Especie[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchAnimals = async () => {
+    const fetchEspecies = async () => {
         try {
-            const data = await getAnimals();
-            setAnimals(data);
+            const data = await getEspecies();
+            setEspecies(data);
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error.message);
@@ -31,46 +32,13 @@ const AnimalsComponent: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchAnimals();
+        fetchEspecies();
     }, []);
 
-    const columns = useMemo<MRT_ColumnDef<Animal>[]>(() => [
+    const columns = useMemo<MRT_ColumnDef<Especie>[]>(() => [
         {
-            header: 'N IPRAM',
-            accessorKey: 'numeroIdIpram'
-        },
-        {
-            header: 'FAI',
-            accessorKey: 'fai'
-        },
-        {
-            header: 'Data de Coleta',
-            accessorKey: 'dataColeta',
-            Cell: ({ cell }) => {
-                const resultado = cell.getValue() as Date;
-                const dataFormatada = resultado ? new Date(resultado).toLocaleDateString() : 'Data inválida';
-                return (
-                    <span>
-                        {dataFormatada}
-                    </span>
-                );
-            }
-        },
-        {
-            header: 'Observações',
-            accessorKey: 'observacoes'
-        },
-        {
-            header: 'Exames',
-            accessorKey: 'exames'
-        },
-        {
-            header: 'Tumor',
-            accessorKey: 'tumor'
-        },
-        {
-            header: 'Solicitante',
-            accessorKey: 'solicitante'
+            header: 'Nome do Especie',
+            accessorKey: 'nome',
         }
     ], []);
 
@@ -87,15 +55,11 @@ const AnimalsComponent: React.FC = () => {
     });
 
     const [idForEdit, setIdForEdit] = useState<null | number>(null);
-    const handleEditAnimal: MRT_TableOptions<Animal>['onEditingRowSave'] = async ({
-        values,
-        table,
-    }) => {
+    const handleEditEspecie: MRT_TableOptions<Especie>['onEditingRowSave'] = async ({ values, table }) => {
         if (idForEdit) {
-            values.id = idForEdit;
-            updateAnimal(idForEdit, values).then((result) => {
+            updateEspecie(idForEdit, values).then((result) => {
                 if (result === 204) {
-                    fetchAnimals();
+                    fetchEspecies();
                 }
             }).catch((error) => {
                 console.error(error);
@@ -104,31 +68,25 @@ const AnimalsComponent: React.FC = () => {
         table.setEditingRow(null);
     };
 
-    const { handleOpenCreateModal } = useCreateModal<Animal>();
+    const { handleOpenCreateModal } = useCreateModal<Especie>();
     const openCreateModal = () => {
-        const columnTypes: Record<keyof Animal, string> = {
+        const columnTypes: Record<keyof Especie, string> = {
             id: 'string',
-            dataColeta: 'date',
-            numeroIdIpram: 'string',
-            fai: 'string',
-            observacoes: 'string',
-            exames: 'comboBox',
-            solicitante: 'comboBox',
-            tumor: 'comboBox',
+            nome: 'string'
         };
         handleOpenCreateModal(columnTypes, (data) => {
-            createAnimal({ ...data, id: 0 }).then((result) => {
-                setAnimals((prevState) => [...prevState, result])
-            })
+            createEspecie({ ...data, id: 0 }).then((result) => {
+                setEspecies((prevState) => [...prevState, result]);
+            });
         });
     };
 
     const { handleOpen } = useConfirm();
-    const openDeleteConfirmModal = (row: MRT_Row<Animal>) => {
+    const openDeleteConfirmModal = (row: MRT_Row<Especie>) => {
         handleOpen(() => {
-            deleteAnimal(row.original.id).then((result) => {
+            deleteEspecie(row.original.id).then((result) => {
                 if (result === 204) {
-                    fetchAnimals();
+                    fetchEspecies();
                 }
             }).catch((error) => {
                 console.error(error);
@@ -139,9 +97,9 @@ const AnimalsComponent: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <MaterialReactTable
-                onEditingRowSave={handleEditAnimal}
+                onEditingRowSave={handleEditEspecie}
                 columns={columns}
-                data={animals}
+                data={Especies}
                 localization={{
                     noRecordsToDisplay: error ? error : undefined
                 }}
@@ -161,7 +119,7 @@ const AnimalsComponent: React.FC = () => {
                                         }
                                     }}
                                     fontSize='large'
-                                    titleAccess='Adicionar Novo Animal'
+                                    titleAccess='Adicionar Novo Especie'
                                     onClick={openCreateModal}
                                 />
                             </Box>
@@ -189,9 +147,6 @@ const AnimalsComponent: React.FC = () => {
                 enablePagination={false}
                 initialState={{
                     showColumnFilters: true,
-                    columnVisibility: {
-                        id: false
-                    }
                 }}
                 enableEditing={true}
                 renderRowActions={({ table, row }) => {
@@ -205,7 +160,7 @@ const AnimalsComponent: React.FC = () => {
                                     <EditIcon />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Delete">
+                            <Tooltip title="Excluir">
                                 <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
                                     <DeleteIcon />
                                 </IconButton>
@@ -218,4 +173,4 @@ const AnimalsComponent: React.FC = () => {
     );
 };
 
-export default AnimalsComponent;
+export default EspeciesComponent;

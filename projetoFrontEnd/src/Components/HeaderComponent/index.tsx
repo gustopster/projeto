@@ -60,6 +60,19 @@ const HeaderComponent: React.FC = () => {
                         title='Acessar tabela de Exames'>
                         Exames
                     </Link>
+                    <Link
+                        component={RouterLink}
+                        to="/especies/"
+                        underline='none'
+                        variant='h6'
+                        color={location.pathname === '/especies/' ? 'success' : 'inherit'}
+                        sx={{
+                            margin: '0 8px',
+                            fontWeight: location.pathname === '/especies/' ? 'bold' : 'normal',
+                        }}
+                        title='Acessar tabela de espécies'>
+                        Espécies
+                    </Link>
                 </Box>
             </Toolbar>
         </AppBar>
