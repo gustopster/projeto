@@ -10,7 +10,7 @@ const HeaderComponent: React.FC = () => {
             position="static"
             sx={{
                 backgroundColor: '#121212',
-                boxShadow: 'none',
+                boxShadow: 'none'
             }}>
             <Toolbar>
                 <Box
@@ -19,6 +19,7 @@ const HeaderComponent: React.FC = () => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         width: '100%',
+                        marginLeft: '-10px'
                     }}
                 >
                     <Link

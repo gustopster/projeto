@@ -30,6 +30,7 @@ const PaginaDeBoasVindas: React.FC<PaginaDeBoasVindasProps> = ({ nomeDoUsuario }
                     alignItems: 'center',
                     bgcolor: 'background.default',
                     color: '#fff',
+                        marginLeft: '20px'
                 }}
             >
                 <h1>Bem-vindo ao Sistema, {nomeDoUsuario.toUpperCase()}!</h1>
