@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class CarteiraService {
 
-    private CarteiraRepository repository;
+    private final CarteiraRepository repository;
 
     public CarteiraService(CarteiraRepository repository) {
         this.repository = repository;

@@ -1,7 +1,6 @@
 package com.projeto.carteira.controller;
 
 import com.projeto.carteira.model.Carteira;
-import com.projeto.carteira.repository.CarteiraRepository;
 import com.projeto.carteira.service.CarteiraService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,6 @@ public class CarteiraController {
     private final CarteiraService service;
 
     public CarteiraController(
-            CarteiraRepository repository,
             CarteiraService service
     ) {
         this.service = service;
