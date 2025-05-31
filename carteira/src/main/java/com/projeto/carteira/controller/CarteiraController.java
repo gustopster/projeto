@@ -2,6 +2,7 @@ package com.projeto.carteira.controller;
 
 import com.projeto.carteira.model.Carteira;
 import com.projeto.carteira.repository.CarteiraRepository;
+import com.projeto.carteira.service.CarteiraService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,42 +11,37 @@ import java.util.List;
 @RequestMapping("/carteira")
 public class CarteiraController {
 
-    private final CarteiraRepository repository;
+    private final CarteiraService service;
 
-    public CarteiraController(CarteiraRepository repository) {
-        this.repository = repository;
+    public CarteiraController(
+            CarteiraRepository repository,
+            CarteiraService service
+    ) {
+        this.service = service;
     }
 
     @GetMapping
     public List<Carteira> getAll() {
-        return repository.findAll(org.springframework.data.domain.Sort.by("id"));
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
     public Carteira getById(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não existe esse ID na Carteira: " + id));
+        return service.getById(id);
     }
 
     @PutMapping("/{id}")
     public Carteira update(@PathVariable Long id, @RequestBody Carteira carteira) {
-        if (!repository.existsById(id)) {
-            throw new RuntimeException("Não existe esse ID na Carteira: " + id);
-        }
-        carteira.setId(id);
-        return repository.save(carteira);
+        return service.update(id, carteira);
     }
 
     @PostMapping()
     public Carteira create(@RequestBody Carteira carteira) {
-        return repository.save(carteira);
+        return service.create(carteira);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        if (!repository.existsById(id)) {
-            throw new RuntimeException("Não existe esse ID na Carteira: " + id);
-        }
-        repository.deleteById(id);
+        service.delete(id);
     }
 }
