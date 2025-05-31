@@ -1,5 +1,3 @@
 {
-    "appService.preDeployTask": "publish-release",
-    "appService.deploySubpath": "projetoBackEnd\\bin\\Release\\net8.0\\publish",
-    "appService.defaultWebAppToDeploy": "/subscriptions/5d0ed852-c85d-4043-885e-51c4d205938f/resourceGroups/backEndProjeto_group/providers/Microsoft.Web/sites/backEndProjeto"
+    "java.compile.nullAnalysis.mode": "automatic"
 }
